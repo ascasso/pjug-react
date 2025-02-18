@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import useAuthentication from 'app/security/use-authentication';
 
 
 export default function Header() {
   const { t } = useTranslation();
+  const authenticationContext = useAuthentication();
 
   return (
     <header className="bg-light">
@@ -31,6 +33,13 @@ export default function Header() {
                   <li><Link to="/userGroupMembers" className="dropdown-item">{t('userGroupMember.list.headline')}</Link></li>
                   <li><Link to="/groupMeetings" className="dropdown-item">{t('groupMeeting.list.headline')}</Link></li>
                 </ul>
+              </li>
+              <li className="navbar-item">
+                {authenticationContext.isLoggedIn() ? (
+                <button type="button" onClick={() => authenticationContext.logout()} className="nav-link">{t('navigation.logout')}</button>
+                ) : (
+                <button type="button" onClick={() => authenticationContext.login()} className="nav-link">{t('navigation.login')}</button>
+                )}
               </li>
             </ul>
           </div>

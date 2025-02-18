@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.pjug.react.config.BaseIT;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -19,6 +20,7 @@ public class GroupMeetingResourceTest extends BaseIT {
     void getAllGroupMeetings_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/groupMeetings")
@@ -34,6 +36,7 @@ public class GroupMeetingResourceTest extends BaseIT {
     void getAllGroupMeetings_filtered() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/groupMeetings?filter=b801e5d4-da87-3c39-9782-741cd794002d")
@@ -48,6 +51,7 @@ public class GroupMeetingResourceTest extends BaseIT {
     void getGroupMeeting_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/groupMeetings/a92d0103-08a6-3379-9a3d-9c728ee74244")
@@ -61,6 +65,7 @@ public class GroupMeetingResourceTest extends BaseIT {
     void getGroupMeeting_notFound() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/groupMeetings/23de10ad-baa1-32ee-93f7-7f679fa1483a")
@@ -73,6 +78,7 @@ public class GroupMeetingResourceTest extends BaseIT {
     void createGroupMeeting_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/groupMeetingDTORequest.json"))
@@ -87,6 +93,7 @@ public class GroupMeetingResourceTest extends BaseIT {
     void createGroupMeeting_missingField() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/groupMeetingDTORequest_missingField.json"))
@@ -104,6 +111,7 @@ public class GroupMeetingResourceTest extends BaseIT {
     void updateGroupMeeting_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/groupMeetingDTORequest.json"))
@@ -121,6 +129,7 @@ public class GroupMeetingResourceTest extends BaseIT {
     void deleteGroupMeeting_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .delete("/api/groupMeetings/a92d0103-08a6-3379-9a3d-9c728ee74244")

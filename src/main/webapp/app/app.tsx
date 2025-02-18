@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet, useLocation } from 'react-router';
+import { AuthenticationProvider } from 'app/security/authentication-provider';
 import Header from 'app/common/header';
 import ErrorBoundary from 'app/error/error-boundary';
 import './app.scss';
@@ -14,17 +15,19 @@ export default function App() {
   const msgInfo = state?.msgInfo || null;
   const msgError = state?.msgError || null;
 
-  return (<>
-    <Header />
-    <main className="my-5">
-      <div className="container">
-        {msgSuccess && <p className="alert alert-success mb-4" role="alert">{msgSuccess}</p>}
-        {msgInfo && <p className="alert alert-info mb-4" role="alert">{msgInfo}</p>}
-        {msgError && <p className="alert alert-danger mb-4" role="alert">{msgError}</p>}
-        <ErrorBoundary>
-          <Outlet/>
-        </ErrorBoundary>
-      </div>
-    </main>
-  </>);
+  return (
+    <AuthenticationProvider>
+      <Header />
+      <main className="my-5">
+        <div className="container">
+          {msgSuccess && <p className="alert alert-success mb-4" role="alert">{msgSuccess}</p>}
+          {msgInfo && <p className="alert alert-info mb-4" role="alert">{msgInfo}</p>}
+          {msgError && <p className="alert alert-danger mb-4" role="alert">{msgError}</p>}
+          <ErrorBoundary>
+            <Outlet/>
+          </ErrorBoundary>
+        </div>
+      </main>
+    </AuthenticationProvider>
+  );
 }

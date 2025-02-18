@@ -5,7 +5,9 @@
   "navigation": {
     "toggle": "Toggle navigation",
     "home": "Home",
-    "entities": "Entities"
+    "entities": "Entities",
+    "login": "Login",
+    "logout": "Logout"
   },
   "home": {
     "index": {
@@ -171,6 +173,11 @@
     },
     "delete": {
       "success": "Group Meeting was removed successfully."
+    }
+  },
+  "authentication": {
+    "logout": {
+      "success": "Your logout was successful."
     }
   },
   "exists": {

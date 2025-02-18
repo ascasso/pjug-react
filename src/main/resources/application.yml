@@ -17,6 +17,11 @@ spring:
             non_contextual_creation: true
         id:
           new_generator_mappings: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8085/realms/realmId123/protocol/openid-connect/certs
   docker:
     compose:
       lifecycle-management: start-only
@@ -27,6 +32,8 @@ error:
     full-stacktrace-http-statuses: 5xx
     log-levels:
       5xx: ERROR
+    http-statuses:
+      org.springframework.security.authorization.AuthorizationDeniedException: unauthorized
     codes:
       UserGroupInfoGroupIDUnique: USER_GROUP_INFO_GROUP_IDUNIQUE
       UserGroupMemberEmailUnique: USER_GROUP_MEMBER_EMAIL_UNIQUE

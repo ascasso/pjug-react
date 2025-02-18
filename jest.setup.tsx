@@ -24,3 +24,9 @@ jest.mock('react-i18next', () => ({
     t: (key: string) => key
   })
 }));
+
+class Keycloak {
+  init() {}
+}
+
+jest.mock('keycloak-js', () => (Keycloak));
