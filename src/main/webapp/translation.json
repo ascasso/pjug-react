@@ -1,0 +1,208 @@
+{
+  "app": {
+    "title": "React"
+  },
+  "navigation": {
+    "toggle": "Toggle navigation",
+    "home": "Home",
+    "entities": "Entities"
+  },
+  "home": {
+    "index": {
+      "headline": "Welcome to your new app!",
+      "text": "Your app was created with <a href=\"https://bootify.io\" target=\"_blank\">Bootify.io</a> and can now be customized. If you are happy with the result, <strong>please recommend us to other developers</strong> - so Bootify.io can grow further.",
+      "swagger": {
+        "text": "Swagger is",
+        "link": "available here"
+      },
+      "exploreEntities": "Explore your entities"
+    }
+  },
+  "error": {
+    "headline": "Error",
+    "message": "The page you are looking for is not available right now."
+  },
+  "userGroupInfo": {
+    "list": {
+      "headline": "User Group Infoes",
+      "createNew": "Create new User Group Info",
+      "empty": "No User Group Infoes could be found.",
+      "sort": {
+        "id,ASC": "Sort by Id (Ascending)",
+        "groupID,ASC": "Sort by GroupID (Ascending)",
+        "groupName,ASC": "Sort by Group Name (Ascending)"
+      },
+      "filter": "Filter by Id",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "add": {
+      "headline": "Add User Group Info",
+      "back": "Back to list"
+    },
+    "id": {
+      "label": "Id"
+    },
+    "groupID": {
+      "label": "GroupID"
+    },
+    "groupName": {
+      "label": "Group Name"
+    },
+    "isActive": {
+      "label": "Is Active"
+    },
+    "edit": {
+      "headline": "Edit User Group Info",
+      "back": "Back to list"
+    },
+    "userGroupMember": {
+      "usergroupId": {
+        "referenced": "This entity is still referenced by User Group Member {{id}} via field Usergroup Id."
+      }
+    },
+    "groupMeeting": {
+      "userGroupId": {
+        "referenced": "This entity is still referenced by Group Meeting {{id}} via field User Group Id."
+      }
+    },
+    "create": {
+      "success": "User Group Info was created successfully."
+    },
+    "update": {
+      "success": "User Group Info was updated successfully."
+    },
+    "delete": {
+      "success": "User Group Info was removed successfully."
+    }
+  },
+  "userGroupMember": {
+    "list": {
+      "headline": "User Group Members",
+      "createNew": "Create new User Group Member",
+      "empty": "No User Group Members could be found.",
+      "sort": {
+        "id,ASC": "Sort by Id (Ascending)",
+        "firstName,ASC": "Sort by First Name (Ascending)",
+        "lastName,ASC": "Sort by Last Name (Ascending)"
+      },
+      "filter": "Filter by Id",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "add": {
+      "headline": "Add User Group Member",
+      "back": "Back to list"
+    },
+    "id": {
+      "label": "Id"
+    },
+    "firstName": {
+      "label": "First Name"
+    },
+    "lastName": {
+      "label": "Last Name"
+    },
+    "email": {
+      "label": "Email"
+    },
+    "preferredJDK": {
+      "label": "PreferredJDK"
+    },
+    "usergroupId": {
+      "label": "Usergroup Id"
+    },
+    "edit": {
+      "headline": "Edit User Group Member",
+      "back": "Back to list"
+    },
+    "create": {
+      "success": "User Group Member was created successfully."
+    },
+    "update": {
+      "success": "User Group Member was updated successfully."
+    },
+    "delete": {
+      "success": "User Group Member was removed successfully."
+    }
+  },
+  "groupMeeting": {
+    "list": {
+      "headline": "Group Meetings",
+      "createNew": "Create new Group Meeting",
+      "empty": "No Group Meetings could be found.",
+      "sort": {
+        "id,ASC": "Sort by Id (Ascending)",
+        "location,ASC": "Sort by Location (Ascending)",
+        "meetingTopic,ASC": "Sort by Meeting Topic (Ascending)"
+      },
+      "filter": "Filter by Id",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "add": {
+      "headline": "Add Group Meeting",
+      "back": "Back to list"
+    },
+    "id": {
+      "label": "Id"
+    },
+    "location": {
+      "label": "Location"
+    },
+    "meetingTopic": {
+      "label": "Meeting Topic"
+    },
+    "meetingStartTime": {
+      "label": "Meeting Start Time"
+    },
+    "userGroupId": {
+      "label": "User Group Id"
+    },
+    "edit": {
+      "headline": "Edit Group Meeting",
+      "back": "Back to list"
+    },
+    "create": {
+      "success": "Group Meeting was created successfully."
+    },
+    "update": {
+      "success": "Group Meeting was updated successfully."
+    },
+    "delete": {
+      "success": "Group Meeting was removed successfully."
+    }
+  },
+  "exists": {
+    "userGroupInfo": {
+      "groupID": "This GroupID is already taken."
+    },
+    "userGroupMember": {
+      "email": "This Email is already taken."
+    }
+  },
+  "select": {
+    "empty": {
+      "label": "Please select"
+    }
+  },
+  "delete": {
+    "confirm": "Do you really want to delete this element? This cannot be undone."
+  },
+  "operation": {
+    "success": "Your operation was successful."
+  },
+  "required": "Please provide a value.",
+  "maxlength": "Your value must have a length of less then ${max} characters.",
+  "valid": {
+    "offsetDateTime": "Please provide a valid date with offset, for example \"2026-01-23T14:55:00+01:00\"."
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "elements": "Item {{range}} of {{total}}"
+  },
+  "searchFilter": {
+    "apply": "Apply"
+  }
+}
