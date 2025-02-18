@@ -25,7 +25,8 @@ public class GroupMeetingResourceTest extends BaseIT {
                 .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("page.totalElements", Matchers.equalTo(2))
-                    .body("content.get(0).id", Matchers.equalTo("a92d0103-08a6-3379-9a3d-9c728ee74244"));
+                    .body("_embedded.groupMeetingDTOList.get(0).id", Matchers.equalTo("a92d0103-08a6-3379-9a3d-9c728ee74244"))
+                    .body("_links.self.href", Matchers.endsWith("/api/groupMeetings?page=0&size=20&sort=id,asc"));
     }
 
     @Test
@@ -39,7 +40,7 @@ public class GroupMeetingResourceTest extends BaseIT {
                 .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("page.totalElements", Matchers.equalTo(1))
-                    .body("content.get(0).id", Matchers.equalTo("b801e5d4-da87-3c39-9782-741cd794002d"));
+                    .body("_embedded.groupMeetingDTOList.get(0).id", Matchers.equalTo("b801e5d4-da87-3c39-9782-741cd794002d"));
     }
 
     @Test
@@ -52,7 +53,8 @@ public class GroupMeetingResourceTest extends BaseIT {
                     .get("/api/groupMeetings/a92d0103-08a6-3379-9a3d-9c728ee74244")
                 .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("location", Matchers.equalTo("Eget est lorem."));
+                    .body("location", Matchers.equalTo("Eget est lorem."))
+                    .body("_links.self.href", Matchers.endsWith("/api/groupMeetings/a92d0103-08a6-3379-9a3d-9c728ee74244"));
     }
 
     @Test
@@ -108,7 +110,8 @@ public class GroupMeetingResourceTest extends BaseIT {
                 .when()
                     .put("/api/groupMeetings/a92d0103-08a6-3379-9a3d-9c728ee74244")
                 .then()
-                    .statusCode(HttpStatus.OK.value());
+                    .statusCode(HttpStatus.OK.value())
+                    .body("_links.self.href", Matchers.endsWith("/api/groupMeetings/a92d0103-08a6-3379-9a3d-9c728ee74244"));
         assertEquals("Consectetuer adipiscing.", groupMeetingRepository.findById(UUID.fromString("a92d0103-08a6-3379-9a3d-9c728ee74244")).orElseThrow().getLocation());
         assertEquals(2, groupMeetingRepository.count());
     }

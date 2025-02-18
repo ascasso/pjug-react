@@ -39,4 +39,4 @@ management:
     health:
       show-details: always
 springdoc:
-  pathsToMatch: /api/**
+  pathsToMatch: /home, /api/**

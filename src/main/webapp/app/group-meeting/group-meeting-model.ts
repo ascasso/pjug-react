@@ -1,6 +1,10 @@
-export class GroupMeetingDTO {
+import { Resource } from 'app/common/hateoas';
+
+
+export class GroupMeetingDTO extends Resource  {
 
   constructor(data:Partial<GroupMeetingDTO>) {
+    super();
     Object.assign(this, data);
   }
 

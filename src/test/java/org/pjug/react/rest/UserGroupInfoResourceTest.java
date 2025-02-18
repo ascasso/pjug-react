@@ -25,7 +25,8 @@ public class UserGroupInfoResourceTest extends BaseIT {
                 .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("page.totalElements", Matchers.equalTo(2))
-                    .body("content.get(0).id", Matchers.equalTo("a9b7ba70-783b-317e-9998-dc4dd82eb3c5"));
+                    .body("_embedded.userGroupInfoDTOList.get(0).id", Matchers.equalTo("a9b7ba70-783b-317e-9998-dc4dd82eb3c5"))
+                    .body("_links.self.href", Matchers.endsWith("/api/userGroupInfos?page=0&size=20&sort=id,asc"));
     }
 
     @Test
@@ -39,7 +40,7 @@ public class UserGroupInfoResourceTest extends BaseIT {
                 .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("page.totalElements", Matchers.equalTo(1))
-                    .body("content.get(0).id", Matchers.equalTo("b8c37e33-defd-351c-b91e-1e03e51657da"));
+                    .body("_embedded.userGroupInfoDTOList.get(0).id", Matchers.equalTo("b8c37e33-defd-351c-b91e-1e03e51657da"));
     }
 
     @Test
@@ -52,7 +53,8 @@ public class UserGroupInfoResourceTest extends BaseIT {
                     .get("/api/userGroupInfos/a9b7ba70-783b-317e-9998-dc4dd82eb3c5")
                 .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("groupID", Matchers.equalTo("Sed diam nonumy."));
+                    .body("groupID", Matchers.equalTo("Sed diam nonumy."))
+                    .body("_links.self.href", Matchers.endsWith("/api/userGroupInfos/a9b7ba70-783b-317e-9998-dc4dd82eb3c5"));
     }
 
     @Test
@@ -108,7 +110,8 @@ public class UserGroupInfoResourceTest extends BaseIT {
                 .when()
                     .put("/api/userGroupInfos/a9b7ba70-783b-317e-9998-dc4dd82eb3c5")
                 .then()
-                    .statusCode(HttpStatus.OK.value());
+                    .statusCode(HttpStatus.OK.value())
+                    .body("_links.self.href", Matchers.endsWith("/api/userGroupInfos/a9b7ba70-783b-317e-9998-dc4dd82eb3c5"));
         assertEquals("Lorem ipsum dolor.", userGroupInfoRepository.findById(UUID.fromString("a9b7ba70-783b-317e-9998-dc4dd82eb3c5")).orElseThrow().getGroupID());
         assertEquals(2, userGroupInfoRepository.count());
     }

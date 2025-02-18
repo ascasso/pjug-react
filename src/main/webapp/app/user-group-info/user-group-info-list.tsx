@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { handleServerError, getListParams } from 'app/common/utils';
 import { UserGroupInfoDTO } from 'app/user-group-info/user-group-info-model';
-import { PagedModel, Pagination } from 'app/common/list-helper/pagination';
+import { Pagination } from 'app/common/list-helper/pagination';
+import { ListModel } from 'app/common/hateoas';
 import axios from 'axios';
 import SearchFilter from 'app/common/list-helper/search-filter';
 import Sorting from 'app/common/list-helper/sorting';
@@ -14,7 +15,7 @@ export default function UserGroupInfoList() {
   const { t } = useTranslation();
   useDocumentTitle(t('userGroupInfo.list.headline'));
 
-  const [userGroupInfoes, setUserGroupInfoes] = useState<PagedModel<UserGroupInfoDTO>|undefined>(undefined);
+  const [userGroupInfoes, setUserGroupInfoes] = useState<ListModel<UserGroupInfoDTO>|undefined>(undefined);
   const navigate = useNavigate();
   const [searchParams, ] = useSearchParams();
   const listParams = getListParams();
@@ -70,13 +71,13 @@ export default function UserGroupInfoList() {
         <Link to="/userGroupInfos/add" className="btn btn-primary ms-2">{t('userGroupInfo.list.createNew')}</Link>
       </div>
     </div>
-    {((userGroupInfoes && userGroupInfoes.page.totalElements !== 0) || searchParams.get('filter')) && (
+    {((userGroupInfoes?._embedded && userGroupInfoes?.page?.totalElements !== 0) || searchParams.get('filter')) && (
     <div className="row">
       <SearchFilter placeholder={t('userGroupInfo.list.filter')} />
       <Sorting sortOptions={sortOptions} rowClass="offset-lg-4" />
     </div>
     )}
-    {!userGroupInfoes || userGroupInfoes.page.totalElements === 0 ? (
+    {!userGroupInfoes?._embedded || userGroupInfoes?.page?.totalElements === 0 ? (
     <div>{t('userGroupInfo.list.empty')}</div>
     ) : (<>
     <div className="table-responsive">
@@ -91,7 +92,7 @@ export default function UserGroupInfoList() {
           </tr>
         </thead>
         <tbody>
-          {userGroupInfoes.content.map((userGroupInfo) => (
+          {userGroupInfoes?._embedded?.['userGroupInfoDTOList']?.map((userGroupInfo) => (
           <tr key={userGroupInfo.id}>
             <td>{userGroupInfo.id}</td>
             <td>{userGroupInfo.groupID}</td>
@@ -109,7 +110,7 @@ export default function UserGroupInfoList() {
         </tbody>
       </table>
     </div>
-    <Pagination page={userGroupInfoes.page} />
+    <Pagination page={userGroupInfoes?.page} />
     </>)}
   </>);
 }

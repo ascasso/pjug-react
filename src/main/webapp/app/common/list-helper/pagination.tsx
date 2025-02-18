@@ -82,13 +82,6 @@ export interface Page {
 
 }
 
-export interface PagedModel<PageType> {
-
-  content: PageType[];
-  page: Page;
-
-}
-
 class PaginationStep {
 
   active = false;
