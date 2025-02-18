@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 import org.pjug.react.domain.UserGroupInfo;
 import org.pjug.react.model.GroupMeetingDTO;
+import org.pjug.react.model.SimpleValue;
 import org.pjug.react.repos.UserGroupInfoRepository;
 import org.pjug.react.service.GroupMeetingService;
 import org.pjug.react.util.CustomCollectors;
@@ -17,7 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +41,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class GroupMeetingResource {
 
     private final GroupMeetingService groupMeetingService;
+    private final GroupMeetingAssembler groupMeetingAssembler;
+    private final PagedResourcesAssembler<GroupMeetingDTO> pagedResourcesAssembler;
     private final UserGroupInfoRepository userGroupInfoRepository;
 
     public GroupMeetingResource(final GroupMeetingService groupMeetingService,
+            final GroupMeetingAssembler groupMeetingAssembler,
+            final PagedResourcesAssembler<GroupMeetingDTO> pagedResourcesAssembler,
             final UserGroupInfoRepository userGroupInfoRepository) {
         this.groupMeetingService = groupMeetingService;
+        this.groupMeetingAssembler = groupMeetingAssembler;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
         this.userGroupInfoRepository = userGroupInfoRepository;
     }
 
@@ -65,31 +75,34 @@ public class GroupMeetingResource {
             }
     )
     @GetMapping
-    public ResponseEntity<Page<GroupMeetingDTO>> getAllGroupMeetings(
+    public ResponseEntity<PagedModel<EntityModel<GroupMeetingDTO>>> getAllGroupMeetings(
             @RequestParam(name = "filter", required = false) final String filter,
             @Parameter(hidden = true) @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable) {
-        return ResponseEntity.ok(groupMeetingService.findAll(filter, pageable));
+        final Page<GroupMeetingDTO> groupMeetingDTOs = groupMeetingService.findAll(filter, pageable);
+        return ResponseEntity.ok(pagedResourcesAssembler.toModel(groupMeetingDTOs, groupMeetingAssembler));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GroupMeetingDTO> getGroupMeeting(
+    public ResponseEntity<EntityModel<GroupMeetingDTO>> getGroupMeeting(
             @PathVariable(name = "id") final UUID id) {
-        return ResponseEntity.ok(groupMeetingService.get(id));
+        final GroupMeetingDTO groupMeetingDTO = groupMeetingService.get(id);
+        return ResponseEntity.ok(groupMeetingAssembler.toModel(groupMeetingDTO));
     }
 
     @PostMapping
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<UUID> createGroupMeeting(
+    public ResponseEntity<EntityModel<SimpleValue<UUID>>> createGroupMeeting(
             @RequestBody @Valid final GroupMeetingDTO groupMeetingDTO) {
         final UUID createdId = groupMeetingService.create(groupMeetingDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+        return new ResponseEntity<>(groupMeetingAssembler.toSimpleModel(createdId), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UUID> updateGroupMeeting(@PathVariable(name = "id") final UUID id,
+    public ResponseEntity<EntityModel<SimpleValue<UUID>>> updateGroupMeeting(
+            @PathVariable(name = "id") final UUID id,
             @RequestBody @Valid final GroupMeetingDTO groupMeetingDTO) {
         groupMeetingService.update(id, groupMeetingDTO);
-        return ResponseEntity.ok(id);
+        return ResponseEntity.ok(groupMeetingAssembler.toSimpleModel(id));
     }
 
     @DeleteMapping("/{id}")

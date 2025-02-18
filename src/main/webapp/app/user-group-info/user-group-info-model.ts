@@ -1,6 +1,10 @@
-export class UserGroupInfoDTO {
+import { Resource } from 'app/common/hateoas';
+
+
+export class UserGroupInfoDTO extends Resource  {
 
   constructor(data:Partial<UserGroupInfoDTO>) {
+    super();
     Object.assign(this, data);
   }
 

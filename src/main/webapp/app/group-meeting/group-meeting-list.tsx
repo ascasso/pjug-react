@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { handleServerError, getListParams } from 'app/common/utils';
 import { GroupMeetingDTO } from 'app/group-meeting/group-meeting-model';
-import { PagedModel, Pagination } from 'app/common/list-helper/pagination';
+import { Pagination } from 'app/common/list-helper/pagination';
+import { ListModel } from 'app/common/hateoas';
 import axios from 'axios';
 import SearchFilter from 'app/common/list-helper/search-filter';
 import Sorting from 'app/common/list-helper/sorting';
@@ -14,7 +15,7 @@ export default function GroupMeetingList() {
   const { t } = useTranslation();
   useDocumentTitle(t('groupMeeting.list.headline'));
 
-  const [groupMeetings, setGroupMeetings] = useState<PagedModel<GroupMeetingDTO>|undefined>(undefined);
+  const [groupMeetings, setGroupMeetings] = useState<ListModel<GroupMeetingDTO>|undefined>(undefined);
   const navigate = useNavigate();
   const [searchParams, ] = useSearchParams();
   const listParams = getListParams();
@@ -61,13 +62,13 @@ export default function GroupMeetingList() {
         <Link to="/groupMeetings/add" className="btn btn-primary ms-2">{t('groupMeeting.list.createNew')}</Link>
       </div>
     </div>
-    {((groupMeetings && groupMeetings.page.totalElements !== 0) || searchParams.get('filter')) && (
+    {((groupMeetings?._embedded && groupMeetings?.page?.totalElements !== 0) || searchParams.get('filter')) && (
     <div className="row">
       <SearchFilter placeholder={t('groupMeeting.list.filter')} />
       <Sorting sortOptions={sortOptions} rowClass="offset-lg-4" />
     </div>
     )}
-    {!groupMeetings || groupMeetings.page.totalElements === 0 ? (
+    {!groupMeetings?._embedded || groupMeetings?.page?.totalElements === 0 ? (
     <div>{t('groupMeeting.list.empty')}</div>
     ) : (<>
     <div className="table-responsive">
@@ -83,7 +84,7 @@ export default function GroupMeetingList() {
           </tr>
         </thead>
         <tbody>
-          {groupMeetings.content.map((groupMeeting) => (
+          {groupMeetings?._embedded?.['groupMeetingDTOList']?.map((groupMeeting) => (
           <tr key={groupMeeting.id}>
             <td>{groupMeeting.id}</td>
             <td>{groupMeeting.location}</td>
@@ -102,7 +103,7 @@ export default function GroupMeetingList() {
         </tbody>
       </table>
     </div>
-    <Pagination page={groupMeetings.page} />
+    <Pagination page={groupMeetings?.page} />
     </>)}
   </>);
 }

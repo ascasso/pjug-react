@@ -25,7 +25,8 @@ public class UserGroupMemberResourceTest extends BaseIT {
                 .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("page.totalElements", Matchers.equalTo(2))
-                    .body("content.get(0).id", Matchers.equalTo("a96e0a04-d20f-3096-bc64-dac2d639a577"));
+                    .body("_embedded.userGroupMemberDTOList.get(0).id", Matchers.equalTo("a96e0a04-d20f-3096-bc64-dac2d639a577"))
+                    .body("_links.self.href", Matchers.endsWith("/api/userGroupMembers?page=0&size=20&sort=id,asc"));
     }
 
     @Test
@@ -39,7 +40,7 @@ public class UserGroupMemberResourceTest extends BaseIT {
                 .then()
                     .statusCode(HttpStatus.OK.value())
                     .body("page.totalElements", Matchers.equalTo(1))
-                    .body("content.get(0).id", Matchers.equalTo("b8bff625-bdb0-3939-92c9-d4db0c6bbe45"));
+                    .body("_embedded.userGroupMemberDTOList.get(0).id", Matchers.equalTo("b8bff625-bdb0-3939-92c9-d4db0c6bbe45"));
     }
 
     @Test
@@ -52,7 +53,8 @@ public class UserGroupMemberResourceTest extends BaseIT {
                     .get("/api/userGroupMembers/a96e0a04-d20f-3096-bc64-dac2d639a577")
                 .then()
                     .statusCode(HttpStatus.OK.value())
-                    .body("firstName", Matchers.equalTo("Nulla facilisis."));
+                    .body("firstName", Matchers.equalTo("Nulla facilisis."))
+                    .body("_links.self.href", Matchers.endsWith("/api/userGroupMembers/a96e0a04-d20f-3096-bc64-dac2d639a577"));
     }
 
     @Test
@@ -109,7 +111,8 @@ public class UserGroupMemberResourceTest extends BaseIT {
                 .when()
                     .put("/api/userGroupMembers/a96e0a04-d20f-3096-bc64-dac2d639a577")
                 .then()
-                    .statusCode(HttpStatus.OK.value());
+                    .statusCode(HttpStatus.OK.value())
+                    .body("_links.self.href", Matchers.endsWith("/api/userGroupMembers/a96e0a04-d20f-3096-bc64-dac2d639a577"));
         assertEquals("No sea takimata.", userGroupMemberRepository.findById(UUID.fromString("a96e0a04-d20f-3096-bc64-dac2d639a577")).orElseThrow().getFirstName());
         assertEquals(2, userGroupMemberRepository.count());
     }

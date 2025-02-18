@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import java.util.Map;
 import java.util.UUID;
 import org.pjug.react.domain.UserGroupInfo;
+import org.pjug.react.model.SimpleValue;
 import org.pjug.react.model.UserGroupMemberDTO;
 import org.pjug.react.repos.UserGroupInfoRepository;
 import org.pjug.react.service.UserGroupMemberService;
@@ -17,7 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.data.web.SortDefault;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +41,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserGroupMemberResource {
 
     private final UserGroupMemberService userGroupMemberService;
+    private final UserGroupMemberAssembler userGroupMemberAssembler;
+    private final PagedResourcesAssembler<UserGroupMemberDTO> pagedResourcesAssembler;
     private final UserGroupInfoRepository userGroupInfoRepository;
 
     public UserGroupMemberResource(final UserGroupMemberService userGroupMemberService,
+            final UserGroupMemberAssembler userGroupMemberAssembler,
+            final PagedResourcesAssembler<UserGroupMemberDTO> pagedResourcesAssembler,
             final UserGroupInfoRepository userGroupInfoRepository) {
         this.userGroupMemberService = userGroupMemberService;
+        this.userGroupMemberAssembler = userGroupMemberAssembler;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
         this.userGroupInfoRepository = userGroupInfoRepository;
     }
 
@@ -65,31 +75,34 @@ public class UserGroupMemberResource {
             }
     )
     @GetMapping
-    public ResponseEntity<Page<UserGroupMemberDTO>> getAllUserGroupMembers(
+    public ResponseEntity<PagedModel<EntityModel<UserGroupMemberDTO>>> getAllUserGroupMembers(
             @RequestParam(name = "filter", required = false) final String filter,
             @Parameter(hidden = true) @SortDefault(sort = "id") @PageableDefault(size = 20) final Pageable pageable) {
-        return ResponseEntity.ok(userGroupMemberService.findAll(filter, pageable));
+        final Page<UserGroupMemberDTO> userGroupMemberDTOs = userGroupMemberService.findAll(filter, pageable);
+        return ResponseEntity.ok(pagedResourcesAssembler.toModel(userGroupMemberDTOs, userGroupMemberAssembler));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserGroupMemberDTO> getUserGroupMember(
+    public ResponseEntity<EntityModel<UserGroupMemberDTO>> getUserGroupMember(
             @PathVariable(name = "id") final UUID id) {
-        return ResponseEntity.ok(userGroupMemberService.get(id));
+        final UserGroupMemberDTO userGroupMemberDTO = userGroupMemberService.get(id);
+        return ResponseEntity.ok(userGroupMemberAssembler.toModel(userGroupMemberDTO));
     }
 
     @PostMapping
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<UUID> createUserGroupMember(
+    public ResponseEntity<EntityModel<SimpleValue<UUID>>> createUserGroupMember(
             @RequestBody @Valid final UserGroupMemberDTO userGroupMemberDTO) {
         final UUID createdId = userGroupMemberService.create(userGroupMemberDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+        return new ResponseEntity<>(userGroupMemberAssembler.toSimpleModel(createdId), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UUID> updateUserGroupMember(@PathVariable(name = "id") final UUID id,
+    public ResponseEntity<EntityModel<SimpleValue<UUID>>> updateUserGroupMember(
+            @PathVariable(name = "id") final UUID id,
             @RequestBody @Valid final UserGroupMemberDTO userGroupMemberDTO) {
         userGroupMemberService.update(id, userGroupMemberDTO);
-        return ResponseEntity.ok(id);
+        return ResponseEntity.ok(userGroupMemberAssembler.toSimpleModel(id));
     }
 
     @DeleteMapping("/{id}")

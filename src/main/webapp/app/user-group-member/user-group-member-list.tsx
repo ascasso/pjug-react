@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { handleServerError, getListParams } from 'app/common/utils';
 import { UserGroupMemberDTO } from 'app/user-group-member/user-group-member-model';
-import { PagedModel, Pagination } from 'app/common/list-helper/pagination';
+import { Pagination } from 'app/common/list-helper/pagination';
+import { ListModel } from 'app/common/hateoas';
 import axios from 'axios';
 import SearchFilter from 'app/common/list-helper/search-filter';
 import Sorting from 'app/common/list-helper/sorting';
@@ -14,7 +15,7 @@ export default function UserGroupMemberList() {
   const { t } = useTranslation();
   useDocumentTitle(t('userGroupMember.list.headline'));
 
-  const [userGroupMembers, setUserGroupMembers] = useState<PagedModel<UserGroupMemberDTO>|undefined>(undefined);
+  const [userGroupMembers, setUserGroupMembers] = useState<ListModel<UserGroupMemberDTO>|undefined>(undefined);
   const navigate = useNavigate();
   const [searchParams, ] = useSearchParams();
   const listParams = getListParams();
@@ -61,13 +62,13 @@ export default function UserGroupMemberList() {
         <Link to="/userGroupMembers/add" className="btn btn-primary ms-2">{t('userGroupMember.list.createNew')}</Link>
       </div>
     </div>
-    {((userGroupMembers && userGroupMembers.page.totalElements !== 0) || searchParams.get('filter')) && (
+    {((userGroupMembers?._embedded && userGroupMembers?.page?.totalElements !== 0) || searchParams.get('filter')) && (
     <div className="row">
       <SearchFilter placeholder={t('userGroupMember.list.filter')} />
       <Sorting sortOptions={sortOptions} rowClass="offset-lg-4" />
     </div>
     )}
-    {!userGroupMembers || userGroupMembers.page.totalElements === 0 ? (
+    {!userGroupMembers?._embedded || userGroupMembers?.page?.totalElements === 0 ? (
     <div>{t('userGroupMember.list.empty')}</div>
     ) : (<>
     <div className="table-responsive">
@@ -84,7 +85,7 @@ export default function UserGroupMemberList() {
           </tr>
         </thead>
         <tbody>
-          {userGroupMembers.content.map((userGroupMember) => (
+          {userGroupMembers?._embedded?.['userGroupMemberDTOList']?.map((userGroupMember) => (
           <tr key={userGroupMember.id}>
             <td>{userGroupMember.id}</td>
             <td>{userGroupMember.firstName}</td>
@@ -104,7 +105,7 @@ export default function UserGroupMemberList() {
         </tbody>
       </table>
     </div>
-    <Pagination page={userGroupMembers.page} />
+    <Pagination page={userGroupMembers?.page} />
     </>)}
   </>);
 }
