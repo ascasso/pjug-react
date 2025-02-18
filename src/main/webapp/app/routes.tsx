@@ -12,6 +12,7 @@ import GroupMeetingList from './group-meeting/group-meeting-list';
 import GroupMeetingAdd from './group-meeting/group-meeting-add';
 import GroupMeetingEdit from './group-meeting/group-meeting-edit';
 import Error from './error/error';
+import { ROLE_USER } from 'app/security/authentication-provider';
 
 
 export default function AppRoutes() {
@@ -19,16 +20,16 @@ export default function AppRoutes() {
     {
       element: <App />,
       children: [
-        { path: '', element: <Home /> },
-        { path: 'userGroupInfos', element: <UserGroupInfoList /> },
-        { path: 'userGroupInfos/add', element: <UserGroupInfoAdd /> },
-        { path: 'userGroupInfos/edit/:id', element: <UserGroupInfoEdit /> },
-        { path: 'userGroupMembers', element: <UserGroupMemberList /> },
-        { path: 'userGroupMembers/add', element: <UserGroupMemberAdd /> },
-        { path: 'userGroupMembers/edit/:id', element: <UserGroupMemberEdit /> },
-        { path: 'groupMeetings', element: <GroupMeetingList /> },
-        { path: 'groupMeetings/add', element: <GroupMeetingAdd /> },
-        { path: 'groupMeetings/edit/:id', element: <GroupMeetingEdit /> },
+        { path: '', element: <Home /> , handle: { roles: [ROLE_USER] } },
+        { path: 'userGroupInfos', element: <UserGroupInfoList /> , handle: { roles: [ROLE_USER] } },
+        { path: 'userGroupInfos/add', element: <UserGroupInfoAdd /> , handle: { roles: [ROLE_USER] } },
+        { path: 'userGroupInfos/edit/:id', element: <UserGroupInfoEdit /> , handle: { roles: [ROLE_USER] } },
+        { path: 'userGroupMembers', element: <UserGroupMemberList /> , handle: { roles: [ROLE_USER] } },
+        { path: 'userGroupMembers/add', element: <UserGroupMemberAdd /> , handle: { roles: [ROLE_USER] } },
+        { path: 'userGroupMembers/edit/:id', element: <UserGroupMemberEdit /> , handle: { roles: [ROLE_USER] } },
+        { path: 'groupMeetings', element: <GroupMeetingList /> , handle: { roles: [ROLE_USER] } },
+        { path: 'groupMeetings/add', element: <GroupMeetingAdd /> , handle: { roles: [ROLE_USER] } },
+        { path: 'groupMeetings/edit/:id', element: <GroupMeetingEdit /> , handle: { roles: [ROLE_USER] } },
         { path: 'error', element: <Error /> },
         { path: '*', element: <Error /> }
       ]

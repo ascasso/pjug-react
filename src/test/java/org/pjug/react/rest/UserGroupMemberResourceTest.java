@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.pjug.react.config.BaseIT;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -19,6 +20,7 @@ public class UserGroupMemberResourceTest extends BaseIT {
     void getAllUserGroupMembers_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/userGroupMembers")
@@ -34,6 +36,7 @@ public class UserGroupMemberResourceTest extends BaseIT {
     void getAllUserGroupMembers_filtered() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/userGroupMembers?filter=b8bff625-bdb0-3939-92c9-d4db0c6bbe45")
@@ -48,6 +51,7 @@ public class UserGroupMemberResourceTest extends BaseIT {
     void getUserGroupMember_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/userGroupMembers/a96e0a04-d20f-3096-bc64-dac2d639a577")
@@ -61,6 +65,7 @@ public class UserGroupMemberResourceTest extends BaseIT {
     void getUserGroupMember_notFound() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/userGroupMembers/23a93ba8-9a5b-3c6c-a26e-49b88973f46e")
@@ -74,6 +79,7 @@ public class UserGroupMemberResourceTest extends BaseIT {
     void createUserGroupMember_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/userGroupMemberDTORequest.json"))
@@ -88,6 +94,7 @@ public class UserGroupMemberResourceTest extends BaseIT {
     void createUserGroupMember_missingField() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/userGroupMemberDTORequest_missingField.json"))
@@ -105,6 +112,7 @@ public class UserGroupMemberResourceTest extends BaseIT {
     void updateUserGroupMember_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/userGroupMemberDTORequest.json"))
@@ -122,6 +130,7 @@ public class UserGroupMemberResourceTest extends BaseIT {
     void deleteUserGroupMember_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .delete("/api/userGroupMembers/a96e0a04-d20f-3096-bc64-dac2d639a577")

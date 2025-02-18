@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.pjug.react.config.BaseIT;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -19,6 +20,7 @@ public class UserGroupInfoResourceTest extends BaseIT {
     void getAllUserGroupInfos_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/userGroupInfos")
@@ -34,6 +36,7 @@ public class UserGroupInfoResourceTest extends BaseIT {
     void getAllUserGroupInfos_filtered() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/userGroupInfos?filter=b8c37e33-defd-351c-b91e-1e03e51657da")
@@ -44,10 +47,24 @@ public class UserGroupInfoResourceTest extends BaseIT {
     }
 
     @Test
+    void getAllUserGroupInfos_unauthorized() {
+        RestAssured
+                .given()
+                    .redirects().follow(false)
+                    .accept(ContentType.JSON)
+                .when()
+                    .get("/api/userGroupInfos")
+                .then()
+                    .statusCode(HttpStatus.UNAUTHORIZED.value())
+                    .body("code", Matchers.equalTo("AUTHORIZATION_DENIED"));
+    }
+
+    @Test
     @Sql("/data/userGroupInfoData.sql")
     void getUserGroupInfo_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/userGroupInfos/a9b7ba70-783b-317e-9998-dc4dd82eb3c5")
@@ -61,6 +78,7 @@ public class UserGroupInfoResourceTest extends BaseIT {
     void getUserGroupInfo_notFound() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .get("/api/userGroupInfos/23d7c8a0-8b4a-3a1b-87c5-99473f5dddda")
@@ -73,6 +91,7 @@ public class UserGroupInfoResourceTest extends BaseIT {
     void createUserGroupInfo_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/userGroupInfoDTORequest.json"))
@@ -87,6 +106,7 @@ public class UserGroupInfoResourceTest extends BaseIT {
     void createUserGroupInfo_missingField() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/userGroupInfoDTORequest_missingField.json"))
@@ -104,6 +124,7 @@ public class UserGroupInfoResourceTest extends BaseIT {
     void updateUserGroupInfo_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                     .contentType(ContentType.JSON)
                     .body(readResource("/requests/userGroupInfoDTORequest.json"))
@@ -121,6 +142,7 @@ public class UserGroupInfoResourceTest extends BaseIT {
     void deleteUserGroupInfo_success() {
         RestAssured
                 .given()
+                    .header(HttpHeaders.AUTHORIZATION, keycloakSecurityToken(ROLE_USER))
                     .accept(ContentType.JSON)
                 .when()
                     .delete("/api/userGroupInfos/a9b7ba70-783b-317e-9998-dc4dd82eb3c5")
